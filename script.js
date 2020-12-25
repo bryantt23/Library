@@ -1,6 +1,6 @@
 let myLibrary = [];
 
-myLibrary = [
+const myLibraryDefault = [
   new Book('Jurassic Park', 'Michael Crichton'),
   new Book('Jane Eyre', 'Charlotte Bronte', true)
 ];
@@ -33,8 +33,6 @@ addBookButton.addEventListener('click', e => {
     addBookToLibrary(new Book(title, author));
     showBooksOnPage();
   }
-  // console.log(document.querySelector('#title'));
-  // const title = document.querySelector('#title').innerText;
 });
 
 //stackoverflow.com/questions/34896106/attach-event-to-dynamic-elements-in-javascript
@@ -70,6 +68,7 @@ function addBookToLibrary(book) {
 }
 
 function showBooksOnPage() {
+  updateLocalStorage();
   const allBooks = document.querySelector('#all-books');
   if (allBooks.hasChildNodes()) {
     while (allBooks.firstChild) {
@@ -89,7 +88,17 @@ function showBooksOnPage() {
   });
 }
 
+function updateLocalStorage() {
+  localStorage.setItem('library', JSON.stringify(myLibrary));
+}
+
 function init() {
+  const localStorageLibrary = localStorage.getItem('library');
+  if (localStorageLibrary) {
+    myLibrary = JSON.parse(localStorageLibrary);
+  } else {
+    myLibrary = myLibraryDefault;
+  }
   showBooksOnPage();
   addNewBookButton.click();
 }
