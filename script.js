@@ -37,6 +37,18 @@ addBookButton.addEventListener('click', e => {
   // const title = document.querySelector('#title').innerText;
 });
 
+//stackoverflow.com/questions/34896106/attach-event-to-dynamic-elements-in-javascript
+document.addEventListener('click', function (e) {
+  if (e.target && e.target.classList.contains('remove')) {
+    //do something
+    const index = Number(
+      e.target.parentNode.firstChild.getAttribute('data-index')
+    );
+    myLibrary.splice(index, index + 1);
+    showBooksOnPage();
+  }
+});
+
 function Book(title, author) {
   // the constructor...
   this.title = title;
@@ -56,9 +68,10 @@ function showBooksOnPage() {
     }
   }
 
-  myLibrary.forEach(book => {
+  myLibrary.forEach((book, index) => {
     const p = document.createElement('p');
-    p.innerHTML = `<p><em>${book.title}</em> by ${book.author}</p>`;
+    p.innerHTML = `<p data-index=${index}><em>${book.title}</em> by ${book.author}</p>
+    <button class="remove">Remove</button>`;
     allBooks.appendChild(p);
   });
 }
