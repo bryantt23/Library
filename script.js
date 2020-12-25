@@ -2,7 +2,7 @@ let myLibrary = [];
 
 myLibrary = [
   new Book('Jurassic Park', 'Michael Crichton'),
-  new Book('Jane Eyre', 'Charlotte Bronte')
+  new Book('Jane Eyre', 'Charlotte Bronte', true)
 ];
 
 const addNewBookForm = document.querySelector('#add-book-form');
@@ -45,14 +45,23 @@ document.addEventListener('click', function (e) {
       e.target.parentNode.firstChild.getAttribute('data-index')
     );
     myLibrary.splice(index, index + 1);
-    showBooksOnPage();
   }
+  if (e.target && e.target.classList.contains('read-status')) {
+    //do something
+    const index = Number(
+      e.target.parentNode.firstChild.getAttribute('data-index')
+    );
+    const book = myLibrary[index];
+    book.read = !book.read;
+  }
+  showBooksOnPage();
 });
 
-function Book(title, author) {
+function Book(title, author, read = false) {
   // the constructor...
   this.title = title;
   this.author = author;
+  this.read = read;
 }
 
 function addBookToLibrary(book) {
@@ -70,8 +79,12 @@ function showBooksOnPage() {
 
   myLibrary.forEach((book, index) => {
     const p = document.createElement('p');
-    p.innerHTML = `<p data-index=${index}><em>${book.title}</em> by ${book.author}</p>
-    <button class="remove">Remove</button>`;
+    p.innerHTML = `<p data-index=${index}><em>${book.title}</em> by ${
+      book.author
+    }</p>
+    <button class="remove">Remove</button>
+    <button class="read-status">${book.read ? 'Read' : 'Unread'}</button>
+    `;
     allBooks.appendChild(p);
   });
 }
